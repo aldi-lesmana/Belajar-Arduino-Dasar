@@ -39,13 +39,14 @@ void loop() {
 
 if(jarak <= 15)
 {
+  Serial.println("Mobil Terdeteksi"); 
   myservo.write(0);
   myservo.write(120); 
   delay(2000);
 }
 
 else{
-  
+  Serial.println("Tidak Ada Mobil"); 
   myservo.write(120); 
   myservo.write(0);
   delay(1000);  
