@@ -1,33 +1,40 @@
-//Sertakan library Servo
+//Library Servo
 #include <Servo.h>
 Servo myservo;
 
+// Library sensor ultrasonik
+#include <NewPing.h>
 
-int trig = 11;           // membuat varibel trig yang di set ke-pin 3
-int echo = 12;           // membuat variabel echo yang di set ke-pin 2
-long durasi, jarak;     // membuat variabel durasi dan jarak
+// Pin yang digunakan untuk menghubungkan sensor ultrasonik
+const int trigPin = 11;   // Pin trigger sensor ultrasonik
+const int echoPin = 12;   // Pin echo sensor ultrasonik
+
+// Objek NewPing untuk mengontrol sensor ultrasonik
+NewPing sonar(trigPin, echoPin);
 
 void setup() {
-  myservo.attach(9);  // servo terhubung pin 9
+  Serial.begin(9600);  // Inisialisasi komunikasi serial
   
-  pinMode(trig, OUTPUT);    // set pin trig menjadi OUTPUT
-  pinMode(echo, INPUT);     // set pin echo menjadi INPUT
-  Serial.begin(9600);       // digunakan untuk komunikasi Serial dengan komputer
+  myservo.attach(9);  // servo terhubung pin 9
+
+  // Mengkonfigurasi pin trigger sebagai output
+  pinMode(trigPin, OUTPUT);
+  // Mengkonfigurasi pin echo sebagai input
+  pinMode(echoPin, INPUT);
+  
 }
 
 void loop() {
 
-  // program dibawah ini agar trigger memancarakan suara ultrasonic
-  digitalWrite(trig, LOW);
-  delayMicroseconds(8);
-  digitalWrite(trig, HIGH);
-  delayMicroseconds(8);
-  digitalWrite(trig, LOW);
-  delayMicroseconds(8);
+  // Mengukur jarak menggunakan sensor ultrasonik
+  int jarak = sonar.ping_cm();
 
-  durasi = pulseIn(echo, HIGH); // menerima suara ultrasonic
-  jarak = (durasi / 2) / 29.1;  // mengubah durasi menjadi jarak (cm)
-  Serial.println(jarak);        // menampilkan jarak pada Serial Monitor
+  // Mencetak hasil ke Serial Monitor
+  Serial.print("Jarak: ");
+  Serial.print(jarak);
+  Serial.println(" cm");
+
+  delay(500);
 
 
 if(jarak <= 15)
